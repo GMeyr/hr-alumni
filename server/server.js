@@ -99,6 +99,7 @@ app.get('/', function(req, res) {
 });
 
 //insert util.checkUser before the handler function to restrict
+
 //page to logged-in users only (as in the example below)
 //app.get('/api/profiles', util.checkUser, handler.findAll);
 app.get('/api/profiles', handler.findAll);
