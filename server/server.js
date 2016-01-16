@@ -97,6 +97,7 @@ app.get('/auth/github/callback',
 app.get('/', function(req, res) {
   res.render('index');
 });
+<<<<<<< HEAD
 
 
 //insert util.checkUser before the handler function to restrict
@@ -104,6 +105,10 @@ app.get('/', function(req, res) {
 //app.get('/api/profiles', util.checkUser, handler.findAll);
 
 app.get('/api/profiles', handler.findAll);
+=======
+app.get('/api/profiles', loginPost);  //this doesn't invoke the function
+app.get('/api/profiles', handler.findAll); //this has a CORS error if you try to call loginPost
+>>>>>>> experimenting with auth
 app.post('/api/profiles', handler.createProfile);
 app.get('/api/profile/:githubName', handler.findOne);app.post('/api/updateProfile', handler.updateProfile)
 app.get('/logout', function(req, res){
@@ -126,3 +131,29 @@ app.get('/api/posts/:post', msgBoardHandler.getPostComments);
 app.listen(port, function() {
   console.log('Server started on port: ' + port);
 });
+<<<<<<< HEAD
+=======
+
+function loginPost(req, res, next){
+  console.log("calling loginPost");
+  passport.authenticate('github', function(err, user, info){
+    if(err){
+      console.log("authenication error")
+      return next(err);
+    }
+    if(!user){
+      console.log("not logged in");
+      req.session.messages = info.message;
+      return res.redirect('/login');
+    }
+    req.logIn(user, function(err){
+      if(err){
+        req.session.messages = "Error logging in user";
+        return next(err);
+      }
+      req.session.messages = "successful login";
+      return res.redirect('/');
+    });
+  })(req, res, next);
+}
+>>>>>>> experimenting with auth
